@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -7,7 +5,7 @@ public class PlayerMovement : MonoBehaviour
 
 
     public CharacterController characterController;
-    public float movementSpeed = 10f;
+    public float movementSpeed = 2f;
     private float gravity = -20f;
     Vector3 velocity;
 
@@ -17,9 +15,12 @@ public class PlayerMovement : MonoBehaviour
     bool isGrounded;
     private float jumpHeight = 3f;
 
+    private Animator characterAnimator;
+
     private void Start()
     {
         groundCheck = GameObject.FindWithTag("groundcheck");
+        characterAnimator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -49,5 +50,14 @@ public class PlayerMovement : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
 
         characterController.Move(velocity * Time.deltaTime);
+
+        if (move.magnitude == 0)
+        {
+            characterAnimator.SetFloat("Speed", 0f);
+        }
+        else if (move.magnitude >= 0.1)
+        {
+            characterAnimator.SetFloat("Speed", 1);
+        }
     }
 }
