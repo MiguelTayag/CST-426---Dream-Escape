@@ -10,4 +10,16 @@ public class SceneSwitcher : MonoBehaviour
     {
         SceneManager.LoadScene("Castle Level");
     }
+
+    public void controls()
+    {
+        SceneManager.LoadScene("Controls Scene");
+    }
+
+    public void menu()
+    {
+        Debug.Log("menu");
+        SceneManager.LoadScene("Start Scene");
+
+    }
 }   
