@@ -5,6 +5,8 @@ public class GunShooting : MonoBehaviour
 {
 
     public float damage = 10f;
+    public float fireRate = 15f;
+
 
     public int maxAmmo = 30;
     private int currentAmmo;
@@ -40,8 +42,9 @@ public class GunShooting : MonoBehaviour
         }
 
 
-        if (Input.GetButton("Fire1"))
+        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire)
         {
+            nextTimeToFire = Time.time + 1f / fireRate;
             Shooting();
         }
 
@@ -50,7 +53,7 @@ public class GunShooting : MonoBehaviour
     IEnumerator Reload()
     {
         isReloading = true;
-        Debug.Log("Rreloading///");
+        Debug.Log("Reloading!");
 
         yield return new WaitForSeconds(reloadTime);
 
