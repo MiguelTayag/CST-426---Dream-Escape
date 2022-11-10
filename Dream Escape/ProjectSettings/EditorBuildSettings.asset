@@ -4,5 +4,17 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Castle Level.unity
+    guid: 4778f5dc108cf2d4295e22f95203013f
+  - enabled: 1
+    path: Assets/Scenes/PlayerController.unity
+    guid: f94fd4f70e855304abf3dfe317abdd20
+  - enabled: 1
+    path: Assets/Scenes/SampleScene.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/Start Scene.unity
+    guid: a9805c7f66835924ca7056b1e55ec235
   m_configObjects: {}
