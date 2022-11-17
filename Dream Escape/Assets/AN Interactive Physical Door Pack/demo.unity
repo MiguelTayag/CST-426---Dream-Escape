@@ -386,6 +386,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8025324976199497260, guid: ed77bee00f19eb7419ea483b781779b6, type: 3}
+      propertyPath: isValve
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8025324976199497260, guid: ed77bee00f19eb7419ea483b781779b6, type: 3}
       propertyPath: xRotation
       value: 0
       objectReference: {fileID: 0}
