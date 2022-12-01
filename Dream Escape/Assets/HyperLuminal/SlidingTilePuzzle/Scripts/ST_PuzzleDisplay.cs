@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
+
 using System.Collections;
 using System.Collections.Generic;
 
@@ -33,29 +35,41 @@ public class ST_PuzzleDisplay : MonoBehaviour
 	// position and scale values.
 	private Vector3 Scale;
 	private Vector3 Position;
-
+	private float time = 0.0f;
+	//private string timerText;
 	// has the puzzle been completed?
 	public bool Complete = false;
+	public bool jugleDone = false;
+	public Texture[] imageListT;
+	public Sprite[] imageListS;
 
+	private int imgNum;
 	// Use this for initialization
 	void Start () 
 	{
 		// create the games puzzle tiles from the provided image.
-		CreatePuzzleTiles();
-
+		PickImage();
+		imgNum = PickImage();
+		PuzzleImage = imageListT[imgNum];
+		Debug.Log(imageListS[imgNum]);
+		GameObject.Find("Image_").GetComponent<Image>().sprite = imageListS[imgNum];
 		// mix up the puzzle.
+		CreatePuzzleTiles();
 		StartCoroutine(JugglePuzzle());
+		//timerText = GameObject.Find("Timer").GetComponent<TMPro.TextMeshProUGUI>().text;
 
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-
-		if(Complete == true)
+		//Debug.Log(timerText);
+		GameObject.Find("Timer").GetComponent<TMPro.TextMeshProUGUI>().text = ": " + time.ToString($"0.00");
+		if (Complete != true && jugleDone == true)
         {
+			time += Time.deltaTime;
 
-        }
+		}
 		// move the puzzle to the position set in the inspector.
 		this.transform.localPosition = PuzzlePosition;
 
@@ -206,6 +220,7 @@ public class ST_PuzzleDisplay : MonoBehaviour
 				}
 			}
 		}
+		jugleDone = true;
 
 		// continually check for the correct answer.
 		StartCoroutine(CheckForComplete());
@@ -324,5 +339,11 @@ public class ST_PuzzleDisplay : MonoBehaviour
 		TileDisplayArray[1,3].GetComponent<Renderer>().material = thisTileMaterial3;
 		TileDisplayArray[2,3].GetComponent<Renderer>().material = thisTileMaterial2;
 		*/
+	}
+
+	private int PickImage()
+	{
+		int x = Random.Range(0, imageListT.Length);
+		return x;
 	}
 }
