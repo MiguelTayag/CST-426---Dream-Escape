@@ -11,6 +11,11 @@ public class SceneSwitcher : MonoBehaviour
         SceneManager.LoadScene("Castle Level");
     }
 
+    public void miniGame()
+    {
+        SceneManager.LoadScene("Minigame");
+    }
+
     public void controls()
     {
         SceneManager.LoadScene("Controls Scene");
