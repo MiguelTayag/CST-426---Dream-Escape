@@ -18,9 +18,18 @@ public class GunShooting : MonoBehaviour
 
     private float nextTimeToFire = 0f;
 
+    private Animator characterAnimator;
+
+    private AudioSource fireSound;
+    private AudioSource reloadSound;
+
     private void Start()
     {
-        if(currentAmmo == -1)
+        characterAnimator = GetComponentInParent<Animator>();
+        fireSound = GameObject.FindWithTag("fireSound").GetComponent<AudioSource>();
+        reloadSound = GameObject.FindWithTag("reloadSound").GetComponent<AudioSource>();
+
+        if (currentAmmo == -1)
         {
             currentAmmo = maxAmmo;
         }
@@ -35,16 +44,17 @@ public class GunShooting : MonoBehaviour
             return;
         }
 
-        if (currentAmmo <= 0)
+        if (currentAmmo <= 0 || (Input.GetKey(KeyCode.R) && currentAmmo != maxAmmo))
         {
             StartCoroutine(Reload());
             return;
         }
 
 
-        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire)
+        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
         {
             nextTimeToFire = Time.time + 1f / fireRate;
+            fireSound.Play();
             Shooting();
         }
         
@@ -54,13 +64,17 @@ public class GunShooting : MonoBehaviour
     IEnumerator Reload()
     {
         isReloading = true;
+        characterAnimator.SetBool("isReloading", true);
         Debug.Log("Reloading!");
+        reloadSound.Play();
 
         yield return new WaitForSeconds(reloadTime);
 
 
         currentAmmo = maxAmmo;
         isReloading = false;
+        characterAnimator.SetBool("isReloading", false);
+        reloadSound.Stop();
     }
 
     void Shooting()

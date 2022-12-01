@@ -17,9 +17,12 @@ public class PlayerMovement : MonoBehaviour
 
     private Animator characterAnimator;
 
+    private GameObject Gun;
+
     private void Start()
     {
         groundCheck = GameObject.FindWithTag("groundcheck");
+        Gun = GameObject.FindWithTag("Gun");
         characterAnimator = GetComponent<Animator>();
     }
 
@@ -58,6 +61,18 @@ public class PlayerMovement : MonoBehaviour
         else if (move.magnitude >= 0.1)
         {
             characterAnimator.SetFloat("Speed", 1);
+        }
+
+        // Equip and Unequip Gun
+        if (Input.GetKey(KeyCode.Alpha1))
+        {
+            characterAnimator.SetBool("isStanding", true);
+            Gun.SetActive(false);
+        }
+        else if (Input.GetKey(KeyCode.Alpha2))
+        {
+            characterAnimator.SetBool("isStanding", false);
+            Gun.SetActive(true);
         }
     }
 }
