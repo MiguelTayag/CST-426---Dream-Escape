@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour
     public GameObject Player;
     public Transform player;
     public LayerMask isGround, isPlayer;
+    [SerializeField]
     private Animator animator;
     public Transform[] waypoints;
     private int waypointIndex;
@@ -43,36 +44,79 @@ public class Enemy : MonoBehaviour
     {
         Mob = GetComponent<NavMeshAgent>();
         UpdateDestination();
+        animator = gameObject.GetComponent<Animator>();
+        //Debug.Log("animator: " + animator.name);
+        //animator.SetBool("isRunning", true);
+        
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         // Check for Sight Range and Attack Range
-        playerInSightRange = Physics.CheckSphere(transform.position, sightRange, isPlayer);
-        playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, isPlayer);
+        //playerInSightRange = Physics.CheckSphere(transform.position, sightRange, isPlayer);
+        //playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, isPlayer);
         
-        float distance = Vector3.Distance(transform.position, Player.transform.position);
 
-        if (distance < MobRadius)
+        float distanceToPlayer = Vector3.Distance(transform.position, Player.transform.position);
+
+        if (distanceToPlayer < MobRadius)
         {
+            animator.SetBool("isRunning", true);
+            playerInSightRange = (distanceToPlayer < sightRange);
+            playerInAttackRange = (distanceToPlayer < attackRange);
+            
             Vector3 dirToPlayer = transform.position - Player.transform.position;
 
             Vector3 newPosition = transform.position - dirToPlayer;
 
             Mob.SetDestination(newPosition);
-
+            
+            if (playerInSightRange)
+            {
+                if (playerInAttackRange)
+                {
+                    AttackingPlayer();
+                }
+                else
+                {
+                    ChasingPlayer();
+                }
+            }
         }
-
-        if (Vector3.Distance(transform.position, target) < 1)
+        else
         {
-            IterateWaypointIndex();
-            UpdateDestination();
+            animator.SetBool("isRunning", false);
+            // patrol path
+            if (Vector3.Distance(transform.position, target) < 1)
+            {
+                IterateWaypointIndex();
+                UpdateDestination();
+            }
+            else
+            {
+                // find new patrol point
+                UpdateDestination();
+            }
+        }
+        
+        //if(!playerInSightRange && !playerInAttackRange) Patrolling();
+        /*if (playerInSightRange && !playerInAttackRange)
+        {
+            animator.SetBool("isRunning", true);
+            //animator.SetBool("isWalking", false);
+            ChasingPlayer();
         }
 
-            //if(!playerInSightRange && !playerInAttackRange) Patrolling();
-        if(playerInSightRange && !playerInAttackRange) ChasingPlayer();
-        if(playerInSightRange && playerInAttackRange) AttackingPlayer();
+        if (playerInSightRange && playerInAttackRange)
+        {
+            //animator.SetBool("isRunning", false);
+            //animator.SetBool("isWalking", true);
+            AttackingPlayer();
+        }*/
+        //animator.SetBool("isRunning", !playerInAttackRange);
+        //Debug.Log("end of update");
     }
 
     void UpdateDestination()
@@ -118,13 +162,14 @@ public class Enemy : MonoBehaviour
 
     private void ChasingPlayer()
     {
+        
         Mob.SetDestination(player.position);
     }
 
     private void AttackingPlayer()
     {
         Mob.SetDestination(transform.position);
-        
+        //animator.SetBool("isRunning", true);
         transform.LookAt(player);
 
         if (!wasAttacked)
