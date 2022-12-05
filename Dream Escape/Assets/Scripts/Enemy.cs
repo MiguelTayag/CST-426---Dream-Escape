@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mono.Cecil;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -14,6 +15,10 @@ public class Enemy : MonoBehaviour
     public GameObject Player;
     public Transform player;
     public LayerMask isGround, isPlayer;
+    private Animator animator;
+    public Transform[] waypoints;
+    private int waypointIndex;
+    private Vector3 target;
     
     
     // Patrolling
@@ -32,10 +37,12 @@ public class Enemy : MonoBehaviour
     public float sightRange, attackRange;
 
     public bool playerInSightRange, playerInAttackRange;
+
     // Start is called before the first frame update
     void Start()
     {
         Mob = GetComponent<NavMeshAgent>();
+        UpdateDestination();
     }
 
     // Update is called once per frame
@@ -56,13 +63,34 @@ public class Enemy : MonoBehaviour
             Mob.SetDestination(newPosition);
 
         }
-        
-        if(!playerInSightRange && !playerInAttackRange) Patrolling();
+
+        if (Vector3.Distance(transform.position, target) < 1)
+        {
+            IterateWaypointIndex();
+            UpdateDestination();
+        }
+
+            //if(!playerInSightRange && !playerInAttackRange) Patrolling();
         if(playerInSightRange && !playerInAttackRange) ChasingPlayer();
         if(playerInSightRange && playerInAttackRange) AttackingPlayer();
     }
 
-    private void Patrolling()
+    void UpdateDestination()
+    {
+        target = waypoints[waypointIndex].position;
+        Mob.SetDestination(target);
+    }
+
+    void IterateWaypointIndex()
+    {
+        waypointIndex++;
+        if (waypointIndex == waypoints.Length)
+        {
+            waypointIndex = 0;
+        }
+    }
+
+    /*private void Patrolling()
     {
         if (!walkPointSet) SearchWalkPoint();
 
@@ -74,7 +102,7 @@ public class Enemy : MonoBehaviour
         // Walkpoint reached
         if (distanceToWalkPoint.magnitude < 1f)
             walkPointSet = false;
-    }
+    }*/
 
     private void SearchWalkPoint()
     {
