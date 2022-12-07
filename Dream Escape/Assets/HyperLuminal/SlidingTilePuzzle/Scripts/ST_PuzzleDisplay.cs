@@ -35,13 +35,14 @@ public class ST_PuzzleDisplay : MonoBehaviour
 	// position and scale values.
 	private Vector3 Scale;
 	private Vector3 Position;
-	private float time = 0.0f;
+	public float time = 0.0f;
 	//private string timerText;
 	// has the puzzle been completed?
 	public bool Complete = false;
 	public bool jugleDone = false;
 	public Texture[] imageListT;
 	public Sprite[] imageListS;
+	public int moves;
 
 	private int imgNum;
 	// Use this for initialization
@@ -68,7 +69,10 @@ public class ST_PuzzleDisplay : MonoBehaviour
 		if (Complete != true && jugleDone == true)
         {
 			time += Time.deltaTime;
-
+		}
+		if(jugleDone == true)
+        {
+			GameObject.Find("NumberOfMoves").GetComponent<TMPro.TextMeshProUGUI>().text = "Moves: " + moves;
 		}
 		// move the puzzle to the position set in the inspector.
 		this.transform.localPosition = PuzzlePosition;
@@ -92,7 +96,8 @@ public class ST_PuzzleDisplay : MonoBehaviour
 			// move the empty tile into this tiles current position.
 			MoveTo.LaunchPositionCoroutine(thisTile.TargetPosition);
 			MoveTo.GridLocation = GridLocation;
-
+			moves++;
+			Debug.Log(moves);
 			// return the new target position.
 			return TargetPos;
 		}
@@ -221,7 +226,7 @@ public class ST_PuzzleDisplay : MonoBehaviour
 			}
 		}
 		jugleDone = true;
-
+		moves = 0;
 		// continually check for the correct answer.
 		StartCoroutine(CheckForComplete());
 
@@ -345,5 +350,15 @@ public class ST_PuzzleDisplay : MonoBehaviour
 	{
 		int x = Random.Range(0, imageListT.Length);
 		return x;
+	}
+
+	public int getMoves()
+    {
+		return moves;
+    }
+
+	public float getTime()
+	{
+		return time;
 	}
 }

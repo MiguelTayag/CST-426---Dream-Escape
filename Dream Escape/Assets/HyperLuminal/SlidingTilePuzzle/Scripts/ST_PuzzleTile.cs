@@ -29,7 +29,6 @@ public class ST_PuzzleTile : MonoBehaviour
 	{
 		// assign the new target position.
 		TargetPosition = newPosition;
-
 		// start the movement coroutine to always move the objects to the new target position.
 		StartCoroutine(UpdatePosition());
 	}
@@ -41,6 +40,7 @@ public class ST_PuzzleTile : MonoBehaviour
 		{
 			// lerp towards our target.
 			this.transform.localPosition = Vector3.Lerp(this.transform.localPosition, TargetPosition, 10.0f * Time.deltaTime);
+			//Debug.Log(moves);
 			yield return null;
 		}
 

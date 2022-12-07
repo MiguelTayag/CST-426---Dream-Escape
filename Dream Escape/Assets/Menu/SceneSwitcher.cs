@@ -27,4 +27,9 @@ public class SceneSwitcher : MonoBehaviour
         SceneManager.LoadScene("Start Scene");
 
     }
+
+    public void leaderboards()
+    {
+        SceneManager.LoadScene("Leaderboard");
+    }
 }   
