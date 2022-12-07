@@ -18,6 +18,6 @@ public class AmmoUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ammoUI.text = gunShooting.currentAmmo.ToString() + "/30";
+        ammoUI.text = gunShooting.currentAmmo.ToString() + "/" + gunShooting.maxAmmo.ToString();
     }
 }
