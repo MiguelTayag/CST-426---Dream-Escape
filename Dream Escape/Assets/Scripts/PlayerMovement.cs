@@ -19,6 +19,8 @@ public class PlayerMovement : MonoBehaviour
 
     private GameObject Gun;
 
+    private bool isGunActive;
+
     private void Start()
     {
         groundCheck = GameObject.FindWithTag("groundcheck");
@@ -63,16 +65,22 @@ public class PlayerMovement : MonoBehaviour
             characterAnimator.SetFloat("Speed", 1);
         }
 
-        // Equip and Unequip Gun
-        if (Input.GetKey(KeyCode.Alpha1))
+   
+    }
+
+    public void togglePlayerWeapon()
+    {
+        if(isGunActive == false)
         {
             characterAnimator.SetBool("isStanding", true);
             Gun.SetActive(false);
+            isGunActive = true;
         }
-        else if (Input.GetKey(KeyCode.Alpha2))
+        else if (isGunActive)
         {
             characterAnimator.SetBool("isStanding", false);
             Gun.SetActive(true);
+            isGunActive = false;
         }
     }
 }
