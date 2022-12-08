@@ -35,18 +35,20 @@ public class ST_PuzzleDisplay : MonoBehaviour
 	// position and scale values.
 	private Vector3 Scale;
 	private Vector3 Position;
-	private float time = 0.0f;
+	public float time = 0.0f;
 	//private string timerText;
 	// has the puzzle been completed?
 	public bool Complete = false;
 	public bool jugleDone = false;
 	public Texture[] imageListT;
 	public Sprite[] imageListS;
+	public int moves;
 
 	private int imgNum;
 	// Use this for initialization
 	void Start () 
 	{
+		GameObject.Find("FinishUI").GetComponent<Canvas>().enabled = false;
 		// create the games puzzle tiles from the provided image.
 		PickImage();
 		imgNum = PickImage();
@@ -66,8 +68,20 @@ public class ST_PuzzleDisplay : MonoBehaviour
 		//Debug.Log(timerText);
 		GameObject.Find("Timer").GetComponent<TMPro.TextMeshProUGUI>().text = ": " + time.ToString($"0.00");
 		if (Complete != true && jugleDone == true)
-        {
+		{
 			time += Time.deltaTime;
+		}
+		if(jugleDone == true)
+        {
+			GameObject.Find("NumberOfMoves").GetComponent<TMPro.TextMeshProUGUI>().text = "Moves: " + moves;
+		}
+		if(Complete == true && jugleDone == true)
+        {
+			GameObject.Find("MainUI").GetComponent<Canvas>().enabled = false;
+			GameObject.Find("FinishUI").GetComponent<Canvas>().enabled = true;
+			GameObject.Find("TotalTime").GetComponent<TMPro.TextMeshProUGUI>().text = "Total Time: " + time.ToString();
+			GameObject.Find("Moves").GetComponent<TMPro.TextMeshProUGUI>().text = "Total Moves: " + moves.ToString();
+
 
 		}
 		// move the puzzle to the position set in the inspector.
@@ -92,7 +106,8 @@ public class ST_PuzzleDisplay : MonoBehaviour
 			// move the empty tile into this tiles current position.
 			MoveTo.LaunchPositionCoroutine(thisTile.TargetPosition);
 			MoveTo.GridLocation = GridLocation;
-
+			moves++;
+			//Debug.Log(moves);
 			// return the new target position.
 			return TargetPos;
 		}
@@ -221,7 +236,7 @@ public class ST_PuzzleDisplay : MonoBehaviour
 			}
 		}
 		jugleDone = true;
-
+		moves = 0;
 		// continually check for the correct answer.
 		StartCoroutine(CheckForComplete());
 
@@ -345,5 +360,15 @@ public class ST_PuzzleDisplay : MonoBehaviour
 	{
 		int x = Random.Range(0, imageListT.Length);
 		return x;
+	}
+
+	public int getMoves()
+    {
+		return moves;
+    }
+
+	public float getTime()
+	{
+		return time;
 	}
 }

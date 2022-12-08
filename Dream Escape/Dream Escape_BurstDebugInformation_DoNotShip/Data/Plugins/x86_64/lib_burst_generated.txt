@@ -112,7 +112,6 @@ Library: lib_burst_generated
 --compilation-defines=ENABLE_TERRAIN
 --compilation-defines=ENABLE_TILEMAP
 --compilation-defines=ENABLE_TIMELINE
---compilation-defines=ENABLE_INPUT_SYSTEM
 --compilation-defines=ENABLE_LEGACY_INPUT_MANAGER
 --compilation-defines=PACKAGE_PHYSICS
 --compilation-defines=PACKAGE_PHYSICS2D
@@ -149,8 +148,8 @@ Library: lib_burst_generated
 --root-assembly=C:\Users\Miguel Tayag\Documents\GitHub\CST-426---Dream-Escape\Dream Escape\Temp\StagingArea\Data\Managed\Cinemachine.dll
 --root-assembly=C:\Users\Miguel Tayag\Documents\GitHub\CST-426---Dream-Escape\Dream Escape\Temp\StagingArea\Data\Managed\Unity.Timeline.dll
 --root-assembly=C:\Users\Miguel Tayag\Documents\GitHub\CST-426---Dream-Escape\Dream Escape\Temp\StagingArea\Data\Managed\Unity.Services.Core.dll
---root-assembly=C:\Users\Miguel Tayag\Documents\GitHub\CST-426---Dream-Escape\Dream Escape\Temp\StagingArea\Data\Managed\Unity.Services.Core.Environments.dll
 --root-assembly=C:\Users\Miguel Tayag\Documents\GitHub\CST-426---Dream-Escape\Dream Escape\Temp\StagingArea\Data\Managed\Assembly-CSharp.dll
+--root-assembly=C:\Users\Miguel Tayag\Documents\GitHub\CST-426---Dream-Escape\Dream Escape\Temp\StagingArea\Data\Managed\Unity.Services.Core.Environments.dll
 --root-assembly=C:\Users\Miguel Tayag\Documents\GitHub\CST-426---Dream-Escape\Dream Escape\Temp\StagingArea\Data\Managed\Unity.Services.Core.Internal.dll
 --root-assembly=C:\Users\Miguel Tayag\Documents\GitHub\CST-426---Dream-Escape\Dream Escape\Temp\StagingArea\Data\Managed\Unity.Services.Core.Analytics.dll
 --root-assembly=C:\Users\Miguel Tayag\Documents\GitHub\CST-426---Dream-Escape\Dream Escape\Temp\StagingArea\Data\Managed\Unity.Services.Core.Scheduler.dll
@@ -290,7 +289,6 @@ Library: lib_burst_generated
 --compilation-defines=ENABLE_TERRAIN
 --compilation-defines=ENABLE_TILEMAP
 --compilation-defines=ENABLE_TIMELINE
---compilation-defines=ENABLE_INPUT_SYSTEM
 --compilation-defines=ENABLE_LEGACY_INPUT_MANAGER
 --compilation-defines=PACKAGE_PHYSICS
 --compilation-defines=PACKAGE_PHYSICS2D
@@ -327,8 +325,8 @@ Library: lib_burst_generated
 --root-assembly=C:\Users\Miguel Tayag\Documents\GitHub\CST-426---Dream-Escape\Dream Escape\Temp\StagingArea\Data\Managed\Cinemachine.dll
 --root-assembly=C:\Users\Miguel Tayag\Documents\GitHub\CST-426---Dream-Escape\Dream Escape\Temp\StagingArea\Data\Managed\Unity.Timeline.dll
 --root-assembly=C:\Users\Miguel Tayag\Documents\GitHub\CST-426---Dream-Escape\Dream Escape\Temp\StagingArea\Data\Managed\Unity.Services.Core.dll
---root-assembly=C:\Users\Miguel Tayag\Documents\GitHub\CST-426---Dream-Escape\Dream Escape\Temp\StagingArea\Data\Managed\Unity.Services.Core.Environments.dll
 --root-assembly=C:\Users\Miguel Tayag\Documents\GitHub\CST-426---Dream-Escape\Dream Escape\Temp\StagingArea\Data\Managed\Assembly-CSharp.dll
+--root-assembly=C:\Users\Miguel Tayag\Documents\GitHub\CST-426---Dream-Escape\Dream Escape\Temp\StagingArea\Data\Managed\Unity.Services.Core.Environments.dll
 --root-assembly=C:\Users\Miguel Tayag\Documents\GitHub\CST-426---Dream-Escape\Dream Escape\Temp\StagingArea\Data\Managed\Unity.Services.Core.Internal.dll
 --root-assembly=C:\Users\Miguel Tayag\Documents\GitHub\CST-426---Dream-Escape\Dream Escape\Temp\StagingArea\Data\Managed\Unity.Services.Core.Analytics.dll
 --root-assembly=C:\Users\Miguel Tayag\Documents\GitHub\CST-426---Dream-Escape\Dream Escape\Temp\StagingArea\Data\Managed\Unity.Services.Core.Scheduler.dll
