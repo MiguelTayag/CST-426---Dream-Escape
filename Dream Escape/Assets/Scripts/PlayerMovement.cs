@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 
     public CharacterController characterController;
     public float movementSpeed = 2f;
+    public int playerHealth = 100;
     private float gravity = -20f;
     Vector3 velocity;
 

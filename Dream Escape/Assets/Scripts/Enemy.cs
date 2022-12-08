@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour
     public Transform[] waypoints;
     private int waypointIndex;
     private Vector3 target;
+    public PlayerMovement playermovement;
     
     
     // Patrolling
@@ -32,8 +33,7 @@ public class Enemy : MonoBehaviour
     // Attacking
     public float damagePerSecond;
     private bool wasAttacked;
-    public GameObject projectile;
-    
+
     // States
     public float sightRange, attackRange;
 
@@ -45,18 +45,20 @@ public class Enemy : MonoBehaviour
         Mob = GetComponent<NavMeshAgent>();
         UpdateDestination();
         animator = gameObject.GetComponent<Animator>();
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        playermovement = Player.gameObject.GetComponent<PlayerMovement>();
         //Debug.Log("animator: " + animator.name);
         //animator.SetBool("isRunning", true);
-        
-        
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
         // Check for Sight Range and Attack Range
-        //playerInSightRange = Physics.CheckSphere(transform.position, sightRange, isPlayer);
-        //playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, isPlayer);
+        playerInSightRange = Physics.CheckSphere(transform.position, sightRange, isPlayer);
+        playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, isPlayer);
         
 
         float distanceToPlayer = Vector3.Distance(transform.position, Player.transform.position);
@@ -75,6 +77,7 @@ public class Enemy : MonoBehaviour
             
             if (playerInSightRange)
             {
+                Debug.Log("Hi");
                 if (playerInAttackRange)
                 {
                     AttackingPlayer();
@@ -100,23 +103,6 @@ public class Enemy : MonoBehaviour
                 UpdateDestination();
             }
         }
-        
-        //if(!playerInSightRange && !playerInAttackRange) Patrolling();
-        /*if (playerInSightRange && !playerInAttackRange)
-        {
-            animator.SetBool("isRunning", true);
-            //animator.SetBool("isWalking", false);
-            ChasingPlayer();
-        }
-
-        if (playerInSightRange && playerInAttackRange)
-        {
-            //animator.SetBool("isRunning", false);
-            //animator.SetBool("isWalking", true);
-            AttackingPlayer();
-        }*/
-        //animator.SetBool("isRunning", !playerInAttackRange);
-        //Debug.Log("end of update");
     }
 
     void UpdateDestination()
@@ -133,20 +119,6 @@ public class Enemy : MonoBehaviour
             waypointIndex = 0;
         }
     }
-
-    /*private void Patrolling()
-    {
-        if (!walkPointSet) SearchWalkPoint();
-
-        if (walkPointSet)
-            Mob.SetDestination(walkPoint);
-
-        Vector3 distanceToWalkPoint = transform.position - walkPoint;
-        
-        // Walkpoint reached
-        if (distanceToWalkPoint.magnitude < 1f)
-            walkPointSet = false;
-    }*/
 
     private void SearchWalkPoint()
     {
@@ -170,16 +142,12 @@ public class Enemy : MonoBehaviour
     {
         Mob.SetDestination(transform.position);
         //animator.SetBool("isRunning", true);
-        transform.LookAt(player);
+        transform.LookAt(Player.transform.position);
 
-        if (!wasAttacked)
+        if (!wasAttacked && playerInAttackRange)
         {
-            // Attack code
-            Rigidbody rb = Instantiate(projectile,transform.position, Quaternion.identity).GetComponent<Rigidbody>();
-            rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
-            rb.AddForce(transform.up * 8f, ForceMode.Impulse);
-            wasAttacked = true;
-            Invoke(nameof(ResetAttack), damagePerSecond);
+            health -= playermovement.playerHealth;
+            Debug.Log(health);
         }
     }
 

@@ -23,7 +23,7 @@ public class AN_DoorScript : MonoBehaviour
     public bool isOpened = false;
     [Range(0f, 4f)]
     [Tooltip("Speed for door opening, degrees per sec")]
-    public float OpenSpeed = 3f;
+    public float OpenSpeed = 10f;
 
     // NearView()
     float distance;
@@ -59,6 +59,7 @@ public class AN_DoorScript : MonoBehaviour
             if (HeroInteractive != null && RedLocked && HeroInteractive.RedKey)
             {
                 RedLocked = false;
+                rbDoor.AddRelativeTorque(new Vector3(0, 0, 500f)); 
                 HeroInteractive.RedKey = false;
             }
             else if (HeroInteractive != null && BlueLocked && HeroInteractive.BlueKey)
@@ -75,7 +76,7 @@ public class AN_DoorScript : MonoBehaviour
             else if (!isOpened && CanOpen && !RedLocked && !BlueLocked)
             {
                 isOpened = true;
-                rbDoor.AddRelativeTorque(new Vector3(0, 0, 20f)); 
+                rbDoor.AddRelativeTorque(new Vector3(0, 0, 500f)); 
             }
         
         }
