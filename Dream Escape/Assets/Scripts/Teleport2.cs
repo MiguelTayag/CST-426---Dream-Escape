@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
-public class TeleportScript : MonoBehaviour
+public class Teleport2 : MonoBehaviour
 {
     public GameObject character;
     // Start is called before the first frame update
@@ -22,7 +22,7 @@ public class TeleportScript : MonoBehaviour
         if (other.gameObject.Equals(character))
         {
             Debug.Log("Enter");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            SceneManager.LoadScene("Start Scene");
         }
     }
 }

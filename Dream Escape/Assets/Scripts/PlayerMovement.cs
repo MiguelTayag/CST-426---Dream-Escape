@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -6,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
 
     public CharacterController characterController;
     public float movementSpeed = 2f;
+    public int playerHealth = 100;
     private float gravity = -20f;
     Vector3 velocity;
 
@@ -82,5 +84,10 @@ public class PlayerMovement : MonoBehaviour
             Gun.SetActive(true);
             isGunActive = false;
         }
+    }
+
+    public void Death()
+    {
+        SceneManager.LoadScene("Start Scene");
     }
 }
