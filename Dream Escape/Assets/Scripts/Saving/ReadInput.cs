@@ -29,6 +29,7 @@ public class ReadInput : MonoBehaviour
     {
         input = s;
         addScore();
+        GameObject.Find("Dialogue").GetComponent<TMPro.TextMeshProUGUI>().text = "Score Added!";
         Debug.Log(input);
     }
 
