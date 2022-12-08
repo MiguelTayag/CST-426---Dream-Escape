@@ -8,8 +8,9 @@ public class GunShooting : MonoBehaviour
     public float fireRate = 15f;
 
 
-    public int maxAmmo = 30;
-    private int currentAmmo;
+    public int maxMagazineCapacity = 30;
+    public int maxAmmo = 60;
+    public int currentAmmo;
     public float reloadTime = 1f;
     private bool isReloading = false;
 
@@ -31,7 +32,7 @@ public class GunShooting : MonoBehaviour
 
         if (currentAmmo == -1)
         {
-            currentAmmo = maxAmmo;
+            currentAmmo = maxMagazineCapacity;
         }
     }
 
@@ -44,14 +45,17 @@ public class GunShooting : MonoBehaviour
             return;
         }
 
-        if (currentAmmo <= 0 || (Input.GetKey(KeyCode.R) && currentAmmo != maxAmmo))
+        if (currentAmmo <= 0 || (Input.GetKey(KeyCode.R) && currentAmmo != maxMagazineCapacity))
         {
-            StartCoroutine(Reload());
-            return;
+            if (maxAmmo > 0)
+            {
+                StartCoroutine(Reload());
+                return;
+            }
         }
 
 
-        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && currentAmmo>0)
         {
             nextTimeToFire = Time.time + 1f / fireRate;
             fireSound.Play();
@@ -70,8 +74,47 @@ public class GunShooting : MonoBehaviour
 
         yield return new WaitForSeconds(reloadTime);
 
-
-        currentAmmo = maxAmmo;
+      
+       
+        // Ammo system with limited capacity
+        if (currentAmmo >= 0 && (maxAmmo >= maxMagazineCapacity))
+        {
+            int remainingAmmo = maxMagazineCapacity - currentAmmo;
+            currentAmmo = currentAmmo + (remainingAmmo);
+            maxAmmo = maxAmmo - (remainingAmmo);
+            if(maxAmmo < 0)
+            {
+                maxAmmo = 0;
+            }
+           
+        }
+        else if(currentAmmo > 0 && maxAmmo < maxMagazineCapacity)
+        {
+            if((maxMagazineCapacity-maxAmmo) > currentAmmo)
+            {
+                currentAmmo += maxAmmo;
+                maxAmmo = 0;
+            }
+            else
+            {
+                int remainingAmmo2 = maxMagazineCapacity - currentAmmo;
+                currentAmmo = currentAmmo + (remainingAmmo2);
+                maxAmmo = maxAmmo - (remainingAmmo2);
+            }
+           
+     
+        
+            if (maxAmmo < 0)
+            {
+                maxAmmo = 0;
+            }
+        }
+        else if(currentAmmo == 0 && (maxAmmo > 0 && maxAmmo < maxMagazineCapacity))
+        {
+            currentAmmo = maxAmmo;
+            maxAmmo = 0;
+        }
+       
         isReloading = false;
         characterAnimator.SetBool("isReloading", false);
         reloadSound.Stop();
