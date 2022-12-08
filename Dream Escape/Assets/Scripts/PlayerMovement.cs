@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -83,5 +84,10 @@ public class PlayerMovement : MonoBehaviour
             Gun.SetActive(true);
             isGunActive = false;
         }
+    }
+
+    public void Death()
+    {
+        SceneManager.LoadScene("Start Scene");
     }
 }

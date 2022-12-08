@@ -5,6 +5,7 @@ using Mono.Cecil;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class Enemy : MonoBehaviour
@@ -12,7 +13,7 @@ public class Enemy : MonoBehaviour
     private NavMeshAgent Mob;
     public float MobRadius= 7f;
     public float health = 100f;
-    public GameObject Player;
+    public GameObject blake;
     public Transform player;
     public LayerMask isGround, isPlayer;
     [SerializeField]
@@ -46,9 +47,7 @@ public class Enemy : MonoBehaviour
         UpdateDestination();
         animator = gameObject.GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        playermovement = Player.gameObject.GetComponent<PlayerMovement>();
-        //Debug.Log("animator: " + animator.name);
-        //animator.SetBool("isRunning", true);
+        playermovement = blake.gameObject.GetComponent<PlayerMovement>();
 
 
     }
@@ -61,29 +60,38 @@ public class Enemy : MonoBehaviour
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, isPlayer);
         
 
-        float distanceToPlayer = Vector3.Distance(transform.position, Player.transform.position);
+        float distanceToPlayer = Vector3.Distance(transform.position, blake.transform.position);
 
         if (distanceToPlayer < MobRadius)
         {
+            Debug.Log("Hi");
+            Debug.Log(distanceToPlayer);
             animator.SetBool("isRunning", true);
             playerInSightRange = (distanceToPlayer < sightRange);
             playerInAttackRange = (distanceToPlayer < attackRange);
             
-            Vector3 dirToPlayer = transform.position - Player.transform.position;
+            Vector3 dirToPlayer = transform.position - blake.transform.position;
 
             Vector3 newPosition = transform.position - dirToPlayer;
 
             Mob.SetDestination(newPosition);
-            
+            if (distanceToPlayer <= 1.1 )   
+            {
+                Debug.Log(gameObject.name);
+                Debug.Log("okay");
+                blake.GetComponent<PlayerMovement>().Death();
+            }
             if (playerInSightRange)
             {
-                Debug.Log("Hi");
+                Debug.Log("Hey");
                 if (playerInAttackRange)
                 {
+                    Debug.Log("what");
                     AttackingPlayer();
                 }
                 else
                 {
+                    Debug.Log("why");
                     ChasingPlayer();
                 }
             }
@@ -94,12 +102,14 @@ public class Enemy : MonoBehaviour
             // patrol path
             if (Vector3.Distance(transform.position, target) < 1)
             {
+                Debug.Log("how");
                 IterateWaypointIndex();
                 UpdateDestination();
             }
             else
             {
                 // find new patrol point
+                Debug.Log("yo");
                 UpdateDestination();
             }
         }
@@ -134,15 +144,14 @@ public class Enemy : MonoBehaviour
 
     private void ChasingPlayer()
     {
-        
+
         Mob.SetDestination(player.position);
     }
 
     private void AttackingPlayer()
     {
         Mob.SetDestination(transform.position);
-        //animator.SetBool("isRunning", true);
-        transform.LookAt(Player.transform.position);
+        transform.LookAt(blake.transform.position);
 
         if (!wasAttacked && playerInAttackRange)
         {
