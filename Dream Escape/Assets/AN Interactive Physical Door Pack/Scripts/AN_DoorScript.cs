@@ -59,7 +59,7 @@ public class AN_DoorScript : MonoBehaviour
             if (HeroInteractive != null && RedLocked && HeroInteractive.RedKey)
             {
                 RedLocked = false;
-                rbDoor.AddRelativeTorque(new Vector3(0, 0, 500f)); 
+                rbDoor.AddRelativeTorque(new Vector3(0, 0, 800f)); 
                 HeroInteractive.RedKey = false;
             }
             else if (HeroInteractive != null && BlueLocked && HeroInteractive.BlueKey)
