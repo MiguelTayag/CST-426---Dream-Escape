@@ -79,6 +79,9 @@ public class ST_PuzzleDisplay : MonoBehaviour
         {
 			GameObject.Find("MainUI").GetComponent<Canvas>().enabled = false;
 			GameObject.Find("FinishUI").GetComponent<Canvas>().enabled = true;
+			GameObject.Find("TotalTime").GetComponent<TMPro.TextMeshProUGUI>().text = "Total Time: " + time.ToString();
+			GameObject.Find("Moves").GetComponent<TMPro.TextMeshProUGUI>().text = "Total Moves: " + moves.ToString();
+
 
 		}
 		// move the puzzle to the position set in the inspector.
