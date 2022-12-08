@@ -34,6 +34,10 @@ public class SceneSwitcher : MonoBehaviour
         SceneManager.LoadScene("Leaderboard");
     }
 
+    public void quit()
+    {
+        Application.Quit();
+    }
    
     // Start is called before the first frame update
 
