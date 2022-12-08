@@ -21,6 +21,7 @@ public class TeleportScript : MonoBehaviour
     {
         if (other.gameObject.Equals(character))
         {
+            Debug.Log("Enter");
             SceneManager.LoadScene("SampleScene");
         }
     }

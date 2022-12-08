@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mono.Cecil;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -14,6 +15,11 @@ public class Enemy : MonoBehaviour
     public GameObject Player;
     public Transform player;
     public LayerMask isGround, isPlayer;
+    [SerializeField]
+    private Animator animator;
+    public Transform[] waypoints;
+    private int waypointIndex;
+    private Vector3 target;
     
     
     // Patrolling
@@ -32,37 +38,103 @@ public class Enemy : MonoBehaviour
     public float sightRange, attackRange;
 
     public bool playerInSightRange, playerInAttackRange;
+
     // Start is called before the first frame update
     void Start()
     {
         Mob = GetComponent<NavMeshAgent>();
+        UpdateDestination();
+        animator = gameObject.GetComponent<Animator>();
+        //Debug.Log("animator: " + animator.name);
+        //animator.SetBool("isRunning", true);
+        
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         // Check for Sight Range and Attack Range
-        playerInSightRange = Physics.CheckSphere(transform.position, sightRange, isPlayer);
-        playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, isPlayer);
+        //playerInSightRange = Physics.CheckSphere(transform.position, sightRange, isPlayer);
+        //playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, isPlayer);
         
-        float distance = Vector3.Distance(transform.position, Player.transform.position);
 
-        if (distance < MobRadius)
+        float distanceToPlayer = Vector3.Distance(transform.position, Player.transform.position);
+
+        if (distanceToPlayer < MobRadius)
         {
+            animator.SetBool("isRunning", true);
+            playerInSightRange = (distanceToPlayer < sightRange);
+            playerInAttackRange = (distanceToPlayer < attackRange);
+            
             Vector3 dirToPlayer = transform.position - Player.transform.position;
 
             Vector3 newPosition = transform.position - dirToPlayer;
 
             Mob.SetDestination(newPosition);
-
+            
+            if (playerInSightRange)
+            {
+                if (playerInAttackRange)
+                {
+                    AttackingPlayer();
+                }
+                else
+                {
+                    ChasingPlayer();
+                }
+            }
+        }
+        else
+        {
+            animator.SetBool("isRunning", false);
+            // patrol path
+            if (Vector3.Distance(transform.position, target) < 1)
+            {
+                IterateWaypointIndex();
+                UpdateDestination();
+            }
+            else
+            {
+                // find new patrol point
+                UpdateDestination();
+            }
         }
         
-        if(!playerInSightRange && !playerInAttackRange) Patrolling();
-        if(playerInSightRange && !playerInAttackRange) ChasingPlayer();
-        if(playerInSightRange && playerInAttackRange) AttackingPlayer();
+        //if(!playerInSightRange && !playerInAttackRange) Patrolling();
+        /*if (playerInSightRange && !playerInAttackRange)
+        {
+            animator.SetBool("isRunning", true);
+            //animator.SetBool("isWalking", false);
+            ChasingPlayer();
+        }
+
+        if (playerInSightRange && playerInAttackRange)
+        {
+            //animator.SetBool("isRunning", false);
+            //animator.SetBool("isWalking", true);
+            AttackingPlayer();
+        }*/
+        //animator.SetBool("isRunning", !playerInAttackRange);
+        //Debug.Log("end of update");
     }
 
-    private void Patrolling()
+    void UpdateDestination()
+    {
+        target = waypoints[waypointIndex].position;
+        Mob.SetDestination(target);
+    }
+
+    void IterateWaypointIndex()
+    {
+        waypointIndex++;
+        if (waypointIndex == waypoints.Length)
+        {
+            waypointIndex = 0;
+        }
+    }
+
+    /*private void Patrolling()
     {
         if (!walkPointSet) SearchWalkPoint();
 
@@ -74,7 +146,7 @@ public class Enemy : MonoBehaviour
         // Walkpoint reached
         if (distanceToWalkPoint.magnitude < 1f)
             walkPointSet = false;
-    }
+    }*/
 
     private void SearchWalkPoint()
     {
@@ -90,13 +162,14 @@ public class Enemy : MonoBehaviour
 
     private void ChasingPlayer()
     {
+        
         Mob.SetDestination(player.position);
     }
 
     private void AttackingPlayer()
     {
         Mob.SetDestination(transform.position);
-        
+        //animator.SetBool("isRunning", true);
         transform.LookAt(player);
 
         if (!wasAttacked)
