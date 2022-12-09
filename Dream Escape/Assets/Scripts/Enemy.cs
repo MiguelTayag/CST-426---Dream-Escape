@@ -15,6 +15,8 @@ public class Enemy : MonoBehaviour
     public float health = 100f;
     public GameObject blake;
     public Transform player;
+    [SerializeField]
+    private float attackDistance = 1.5f;
     public LayerMask isGround, isPlayer;
     [SerializeField]
     private Animator animator;
@@ -22,7 +24,9 @@ public class Enemy : MonoBehaviour
     private int waypointIndex;
     private Vector3 target;
     public PlayerMovement playermovement;
-    
+    public int damageAmount = 20;
+    public float attackCooldown = 1f;
+    public bool canAttack = true;
     
     // Patrolling
     public Vector3 walkPoint;
@@ -75,11 +79,18 @@ public class Enemy : MonoBehaviour
             Vector3 newPosition = transform.position - dirToPlayer;
 
             Mob.SetDestination(newPosition);
-            if (distanceToPlayer <= 1.1 )   
+            if (distanceToPlayer <= attackDistance )   
             {
                 Debug.Log(gameObject.name);
                 Debug.Log("okay");
-                blake.GetComponent<PlayerMovement>().Death();
+                if (canAttack)
+                {
+                    blake.GetComponent<PlayerMovement>().TakeDamage(damageAmount);
+                    canAttack = false;
+                    StartCoroutine(AttackCooldown());
+                }
+                
+                
             }
             if (playerInSightRange)
             {
@@ -109,12 +120,17 @@ public class Enemy : MonoBehaviour
             else
             {
                 // find new patrol point
-                Debug.Log("yo");
                 UpdateDestination();
             }
         }
     }
 
+    IEnumerator AttackCooldown()
+    {
+        yield return new WaitForSeconds(attackCooldown);
+        canAttack = true;
+    }
+    
     void UpdateDestination()
     {
         target = waypoints[waypointIndex].position;

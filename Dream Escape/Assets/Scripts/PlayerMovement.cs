@@ -90,4 +90,20 @@ public class PlayerMovement : MonoBehaviour
     {
         SceneManager.LoadScene("Start Scene");
     }
+
+    public void TakeDamage(int damageAmount)
+    {
+        if (playerHealth <= 0)
+        {
+            Debug.Log("player already dead");
+            return;
+        }
+        
+        playerHealth -= damageAmount;
+        if (playerHealth <= 0)
+        {
+            Debug.Log("player died");
+            Death();
+        }
+    }
 }
